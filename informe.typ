@@ -80,7 +80,7 @@ La decisión de utilizar este método se fundamenta en la cantidad de factores q
 La realización de este experimento requiere de tres partes: la confección del dispositivo de medición, la calibración del sensor y la medición de la rapidez del auto a control remoto.
 
 == Confección del dispositivo de medición
-La confección del dispositivo de medición consiste en unir el sensor HC-SR04 a un Arduino MKR WiFi 1010 utilizando un protoboard y cables. Este controlador se conectaba a una computadora para servir como fuente de poder y permitir la recolección de datos. Imágenes de los componentes y el dispositivo de medición se pueden ver en la @fig:device_and_components.
+La confección del dispositivo de medición consiste en unir el sensor HC-SR04 a un Arduino MKR WiFi 1010 utilizando un _protoboard_ y cables. Este controlador se conectaba a una computadora para servir como fuente de poder y permitir la recolección de datos. Imágenes de los componentes y el dispositivo de medición se pueden ver en la @fig:device_and_components.
 
 #subpar.grid(
   caption: [Dispositivo de medición y sus componentes.],
@@ -235,7 +235,7 @@ Se puede observar en la @table:calibration_test que la calibración el sensor re
   }),
 ) <fig:graph_calibration_test>
 
-Se intentó hacer una correción a la @eq:calibrated_regression a partir de la @table:calibration_test haciendo una regresión lineal para predecir la distancia real a partir de la medida del sensor, pero se obtuvieron peores resultados. Esta segunda prueba se realizó exclusivamente para distancias mayores a #qty[20][cm] y el EAM fue de #qty[0.40][cm], un #qty[118.7][%] más que el error sin la corrección. El procedimiento exacto de la corrección se encuentra en el _Notebook_ adjunto. Debido a que no se consiguió una mejor calibración que la expresada en la @eq:calibrated_regression, fue esta la que se utilizó en las mediciones de rapidez en el @fig:arduino_code.
+Se intentó hacer una corrección a la @eq:calibrated_regression a partir de la @table:calibration_test haciendo una regresión lineal para predecir la distancia real a partir de la medida del sensor, pero se obtuvieron peores resultados. Esta segunda prueba se realizó exclusivamente para distancias mayores a #qty[20][cm] y el EAM fue de #qty[0.40][cm], un #qty[118.7][%] más que el error sin la corrección. El procedimiento exacto de la corrección se encuentra en el _Notebook_ adjunto. Debido a que no se consiguió una mejor calibración que la expresada en la @eq:calibrated_regression, fue esta la que se utilizó en las mediciones de rapidez en el @fig:arduino_code.
 
 == Medición de rapidez <sec:procedure_speed_test>
 Con el sensor HC-SR04 ya calibrado, se utilizó el código presentado en el @fig:arduino_code para medir la distancia a la que se encontraba el auto de juguete a través del tiempo. En el @fig:arduino_code:12 se muestra como se utiliza una medida relativa de tiempo donde se define $t=0$ en el momento en el que se ejecuta la función ```cpp void setup()``` en el Arduino.
@@ -266,12 +266,12 @@ Los resultados de este filtro se presentan en la @fig:hampel_filter. El _script_
   caption: [Gráfica posición $lambda$ vs tiempo $t$ mostrando la limpieza del ruido utilizando el filtro de Hampel.],
   [#figure(
       hampel-comparison,
-      caption: [Comparasión entre los datos sin filtrar y con filtrado de Hampel.],
+      caption: [Comparación entre los datos sin filtrar y con filtrado de Hampel.],
     ) <fig:filtered_speed_test_comparison>],
   [#figure(speed-test-filtered, caption: [Movimiento del auto con filtro de Hampel]) <fig:clean_speed_test>],
 )
 
-Dadas estas posiciones sin ruido del sensor, se aplicó regresión polinomial de grado tres para obtener una función que describa el movmiento del auto y poder analizar su velocidad y aceleración. El procedimiento para obtener esta regresión se presenta en el _Notebook_ adjunto. La regresión dio como resultado el polinomio presentado en la @eq:polinomio_pos.#footnote[Para ${#qty[0.26][s] <= t <= #qty[1.45][s]}$] Esta regresión se aproxima bastante a los datos, a excepción de las zonas donde se presentaba mayor cantidad de ruido, donde es muy probable que se haya perdido la información original del movimiento del auto. Específicamente, la regresión tiene un EAM de #qty[1.68][cm] y un ECM de #qty[5.38][cm^2].  
+Dadas estas posiciones sin ruido del sensor, se aplicó regresión polinomial de grado tres para obtener una función que describa el movimiento del auto y poder analizar su velocidad y aceleración. El procedimiento para obtener esta regresión se presenta en el _Notebook_ adjunto. La regresión dio como resultado el polinomio presentado en la @eq:polinomio_pos.#footnote[Para ${#qty[0.26][s] <= t <= #qty[1.45][s]}$] Esta regresión se aproxima bastante a los datos, a excepción de las zonas donde se presentaba mayor cantidad de ruido, donde es muy probable que se haya perdido la información original del movimiento del auto. Específicamente, la regresión tiene un EAM de #qty[1.68][cm] y un ECM de #qty[5.38][cm^2].
 
 $ x = -56.03t^3 + 176.89t^2 - 72.00t + 11.86 $ <eq:polinomio_pos>
 
@@ -281,17 +281,24 @@ En la @fig:analytical_results se presentan los resultados analíticos obtenidos 
   placement: top,
   scope: "parent",
   caption: [Resultados analíticos del movimiento del auto.],
-  analytical_results
+  analytical_results,
 ) <fig:analytical_results>
 
 = Discusión
+Los resultados muestran ciertos comportamientos contrarios a la intuición, a continuación se discutirán los resultados inesperados sobre ruido y aceleración encontrados en el movimiento.
 
-Inicialmente, se esperaba del análisis que la aceleración del auto fuera positiva en la dirección contraria al sensor, pero la @fig:analytical_results muestra una aceleración negativa, lo cual no es muy intuitivo. Se esperaría que al mover la palanca del control remoto del auto hacia adelante, este empezaría a acelerar positivamente ganando rapidez hasta llegar a un valor constante. Hay varias hipótesis que podrían explicar  este resultado, algunas se mencionan a continuación.
+== Resultados analíticos
+
+Inicialmente, se esperaba del análisis que la aceleración del auto fuera positiva en la dirección contraria al sensor, pero la @fig:analytical_results muestra una aceleración negativa, lo cual no es muy intuitivo. Se esperaría que al mover la palanca del control remoto del auto hacia adelante, este empezaría a acelerar positivamente ganando rapidez hasta llegar a un valor constante. Hay varias hipótesis que podrían explicar este resultado, algunas se mencionan a continuación.
 
 *Limitaciones del Motor y Potencia.* El auto a control remoto utilizado es de bajo costo y posee un motor simple. Es probable que este motor genere un impulso inicial considerable (un pico de torque al arrancar), lo que explicaría el aumento inicial de la velocidad. Sin embargo, su potencia sostenida podría ser insuficiente para contrarrestar las fuerzas resistivas que aumentan con la velocidad, como la fricción del aire y la resistencia al rodamiento. Como resultado, el motor podría ser capaz de hacer que el auto alcance rápidamente su velocidad máxima para su potencia limitada bajo esas condiciones, y luego, la aceleración neta se vuelve negativa a medida que las fuerzas de resistencia superan la fuerza de propulsión del motor.
 
 *Respuesta No Lineal del Sistema.* No se puede asumir que el auto, al ser un sistema físico real, responderá de forma perfectamente lineal y continua a la entrada del joystick. Un motor simple, especialmente con una batería económica, puede tener una entrega de potencia que decae o se estabiliza rápidamente, no permitiendo una aceleración positiva sostenida en el tiempo, a pesar de que el usuario mantenga el joystick hacia adelante.
 
+== Ruido
+Los datos presentados en la @fig:noisy_speed_test_graph describen la posición medida por el sensor en base al tiempo. La posición inicial del auto era de #qty[3.5][cm], pero el sensor registraba constantemente #qty[3.85][cm]. Luego, el auto comenzó a acelerar positivamente hasta salir del área medible del sensor. Este límite se encuentra en $lambda = #qty[107][cm]$. Esto se sabe puesto a que cuando se remueven todos los objetos del sensor, este mide esa cantidad por defecto. Esto se debe a que el experimento fue realizado dentro de la sala de estar del hogar de uno de los participantes, lo que significa que hay muchos objetos (sofás, paredes, sillas) que pueden ser reconocidos por el sensor en vez del auto. En $#qty[1][s] < t < #qty[2][s]$ de la prueba de velocidad podemos observar grandes cantidades de ruido. Este ruido, generalmente son lecturas incorrectas que regresan a #qty[48.02][cm] aunque la media sea mucho mayor que este número. Esto se puede explicar con lo discutido anteriormente: quizás, el sensor reconocía algún objeto cercano cuando sus ondas empezaban a expandirse más dando lecturas falsas.
+
 = Conclusión
+El sensor ultrasónico HC-SR04 es una herramienta útil para medir distancias y velocidades, aunque su precisión puede verse afectada por factores como la temperatura y la humedad. En este informe se presentó el uso de este sensor para medir la rapidez de un auto a control remoto de juguete. Se realizó una calibración del sensor obteniendo un error absoluto medio (EAM) de #eam y posteriormente se utilizó este para medir la rapidez del auto utilizando un Arduino. Se presentaron los métodos de recolección de datos y análisis de los mismos, incluyendo el uso de un filtro Hampel para eliminar el ruido en las mediciones. Se concluyó que el sensor ultrasónico es una herramienta útil para medir distancias y velocidades, aunque su precisión puede verse afectada por factores ambientales, el lugar donde se realiza la medición y las características del objeto a medir. Además, se observó que el auto a control remoto no aceleraba positivamente como se esperaba, lo que podría deberse a limitaciones del motor y la potencia del sistema.
 
 #bibliography("sources.bib")

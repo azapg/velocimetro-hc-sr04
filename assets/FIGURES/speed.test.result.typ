@@ -8,7 +8,7 @@
   plot.plot(
     size: (7,7),
     y-max: 110,
-    x-tick-step: 1,
+    x-tick-step: 0.5,
     x-grid: true,
     y-grid: true,
     y-label: [Distancia $lambda$ (#unit[cm])],
