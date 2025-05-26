@@ -9,6 +9,7 @@
 
 #import "assets/FIGURES/speed.test.result.typ": speed-test-result;
 #import "assets/FIGURES/hampel.typ": hampel-comparison, speed-test-filtered
+#import "assets/FIGURES/analytical_position.typ": analytical_results
 
 #show: codly-init.with()
 
@@ -269,6 +270,19 @@ Los resultados de este filtro se presentan en la @fig:hampel_filter. El _script_
     ) <fig:filtered_speed_test_comparison>],
   [#figure(speed-test-filtered, caption: [Movimiento del auto con filtro de Hampel]) <fig:clean_speed_test>],
 )
+
+Dadas estas posiciones sin ruido del sensor, se aplicó regresión polinomial de grado tres para obtener una función que describa el movmiento del auto y poder analizar su velocidad y aceleración. El procedimiento para obtener esta regresión se presenta en el _Notebook_ adjunto. La regresión dio como resultado el polinomio presentado en la @eq:polinomio_pos.#footnote[Para ${#qty[0.26][s] <= t <= #qty[1.45][s]}$] Esta regresión se aproxima bastante a los datos, a excepción de las zonas donde se presentaba mayor cantidad de ruido, donde es muy probable que se haya perdido la información original del movimiento del auto. Específicamente, la regresión tiene un EAM de #qty[1.68][cm] y un ECM de #qty[5.38][cm^2].  
+
+$ x = -56.03t^3 + 176.89t^2 - 72.00t + 11.86 $ <eq:polinomio_pos>
+
+En la @fig:analytical_results se presentan los resultados analíticos obtenidos a partir de la @eq:polinomio_pos, incluyendo sus derivadas.
+
+#figure(
+  placement: top,
+  scope: "parent",
+  caption: [Resultados analíticos del movimiento del auto.],
+  analytical_results
+) <fig:analytical_results>
 
 = Discusión
 

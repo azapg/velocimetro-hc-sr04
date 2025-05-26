@@ -62,7 +62,7 @@
     legend: "north",
     {
       plot.add(
-        csv("../DATA/cleaned_acceleration.csv", row-type: dictionary).map(point => (
+        csv("../DATA/positions_clean.csv", row-type: dictionary).map(point => (
           float(point.relative_time_s),
           float(point.distance),
         )),
