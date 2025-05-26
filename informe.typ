@@ -167,13 +167,16 @@ Se obtuvieron #calibration_measures medidas al momento de calibrar desde #calibr
 
 A partir de esta tabla se realizó una regresión lineal simple para modelar la distancia $L$ en función del tiempo $t$. En este análisis se consideró el tiempo en microsegundos como la variable independiente y la distancia la variable dependiente. Esta regresión y otros cálculos presentados en este informe se encuentran en el _Google Colab Notebook#footnote[https://colab.research.google.com/drive/1MRqGOb3qpIqmzman0MIP67u1fVKp5ZqM?usp=sharing]_ adjuntado a este informe.
 
+#let calibration-data = csv("assets/DATA/calibration.csv");
+#let _ = calibration-data.remove(0);
+
 #figure(
   caption: [Tiempos promedio $t$ en microsegundos obtenidos a partir de las distancias $L$ en el proceso de calibración],
   table(
     ..pillar.cols("cc||cc||cc"),
     ..([$L$ (cm)], [$t$ ($mu "s"$)]) * 3,
     table.hline(),
-    ..csv("assets/DATA/calibration.csv").flatten()
+    ..calibration-data.flatten()
   ),
 ) <table:calibration>
 
@@ -186,6 +189,7 @@ $ lambda = 0.0183 t - 0.03639 $ <eq:calibrated_regression>
 Con la @eq:calibrated_regression se volvieron a tomar medidas para calcular el error de esta calibración. Se utilizó el mismo procedimiento mencionado anteriormente y se obtuvieron los datos presentados en la @table:calibration_test
 
 #let calibration-test-data = csv("assets/DATA/calibration_test.csv")
+#let _ = calibration-test-data.remove(0);
 
 #figure(
   caption: [Distancia real $L$ y distancia leída por el sensor $lambda$ después de la calibración],
@@ -266,10 +270,7 @@ Los resultados de este filtro se presentan en la @fig:hampel_filter. El _script_
   [#figure(speed-test-filtered, caption: [Movimiento del auto con filtro de Hampel]) <fig:clean_speed_test>],
 )
 
-
-
 = Discusión
-
 
 = Conclusión
 
