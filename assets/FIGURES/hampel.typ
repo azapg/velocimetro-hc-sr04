@@ -37,8 +37,10 @@
           float(point.relative_time_s),
           float(point.distance),
         )),
-        style: (stroke: none, color: red),
+        style: (stroke: none),
         mark: "o",
+        mark-style: (fill: red.lighten(10%), stroke: none),
+        mark-size: 0.12,
         label: [Valores atípicos],
       )
     },

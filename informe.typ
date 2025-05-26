@@ -165,7 +165,7 @@ En la configuración mostrada en la @fig:calibration_elements, las distancias se
 
 Se obtuvieron #calibration_measures medidas al momento de calibrar desde #calibration-measures-min hasta #calibration_measures_max. Para cada distancia medida, se colocaba la superficie metálica frente al sensor y se observaba los tiempos resultantes en el monitor serial del Arduino y se registraba el tiempo más frecuente que apareciera en la pantalla. En caso de haber ruido en la medición, lo cual era común, se obtenían 10 medidas en un momento al azar y se calculaba un promedio a partir de esas medidas y ese sería el valor registrado. Esto se repetía 3 veces removiendo y volviendo a colocar la superficie para obtener un valor promedio que sería agregado a la tabla de calibración presentada en la @table:calibration.
 
-A partir de esta tabla se realizó una regresión lineal simple para modelar la distancia $L$ en función del tiempo $t$. En este análisis se consideró el tiempo en microsegundos como la variable independiente y la distancia la variable dependiente. Esta regresión y otros cálculos presentados en este informe se encuentran en el _Google Colab Notebook#footnote[https://colab.research.google.com/drive/1MRqGOb3qpIqmzman0MIP67u1fVKp5ZqM?usp=sharing]_ adjuntado a este informe.
+A partir de esta tabla se realizó una regresión lineal simple para modelar la distancia $L$ en función del tiempo $t$. En este análisis se consideró el tiempo en microsegundos como la variable independiente y la distancia la variable dependiente. Esta regresión y otros cálculos presentados en este informe se encuentran en el _Notebook#footnote[https://github.com/azapg/velocimetro-hc-sr04/blob/main/velocimetro-hc-sr04.ipynb]_ adjuntado a este informe.
 
 #let calibration-data = csv("assets/DATA/calibration.csv");
 #let _ = calibration-data.remove(0);
@@ -203,7 +203,7 @@ Con la @eq:calibrated_regression se volvieron a tomar medidas para calcular el e
 
 #let ecm = qty[0.37][cm^2]
 
-Se puede observar en la @table:calibration_test que la calibración el sensor registra lecturas muy aproximadas a los valores reales. En el _Google Colab Notebook_ adjunto se hace un pequeño análisis del error de esta calibración y los resultados muestran un EAM de #eam y un error cuadrático medio (ECM) de #ecm. Se puede observar en la @fig:graph_calibration_test que hay un mayor error al medir objetos muy próximos al sensor. Se hicieron análisis de error en distintas regiones y se obtuvo que para distancias menores a #qty[10][cm] el EAM es de #qty[0.69][cm] y para distancias mayores a #qty[20][cm] es de #qty[0.18][cm].
+Se puede observar en la @table:calibration_test que la calibración el sensor registra lecturas muy aproximadas a los valores reales. En el _Notebook_ adjunto se hace un pequeño análisis del error de esta calibración y los resultados muestran un EAM de #eam y un error cuadrático medio (ECM) de #ecm. Se puede observar en la @fig:graph_calibration_test que hay un mayor error al medir objetos muy próximos al sensor. Se hicieron análisis de error en distintas regiones y se obtuvo que para distancias menores a #qty[10][cm] el EAM es de #qty[0.69][cm] y para distancias mayores a #qty[20][cm] es de #qty[0.18][cm].
 
 #figure(
   caption: [Gráfica mostrando los datos obtenidos en la prueba de la calibración. Se presentan las medidas del sensor y las medidas ideales en base a las medidas reales de las pruebas.],
@@ -234,7 +234,7 @@ Se puede observar en la @table:calibration_test que la calibración el sensor re
   }),
 ) <fig:graph_calibration_test>
 
-Se intentó hacer una correción a la @eq:calibrated_regression a partir de la @table:calibration_test haciendo una regresión lineal para predecir la distancia real a partir de la medida del sensor, pero se obtuvieron peores resultados. Esta segunda prueba se realizó exclusivamente para distancias mayores a #qty[20][cm] y el EAM fue de #qty[0.40][cm], un #qty[118.7][%] más que el error sin la corrección. El procedimiento exacto de la corrección se encuentra en el _Google Colab Notebook_ adjunto. Debido a que no se consiguió una mejor calibración que la expresada en la @eq:calibrated_regression, fue esta la que se utilizó en las mediciones de rapidez en el @fig:arduino_code.
+Se intentó hacer una correción a la @eq:calibrated_regression a partir de la @table:calibration_test haciendo una regresión lineal para predecir la distancia real a partir de la medida del sensor, pero se obtuvieron peores resultados. Esta segunda prueba se realizó exclusivamente para distancias mayores a #qty[20][cm] y el EAM fue de #qty[0.40][cm], un #qty[118.7][%] más que el error sin la corrección. El procedimiento exacto de la corrección se encuentra en el _Notebook_ adjunto. Debido a que no se consiguió una mejor calibración que la expresada en la @eq:calibrated_regression, fue esta la que se utilizó en las mediciones de rapidez en el @fig:arduino_code.
 
 == Medición de rapidez <sec:procedure_speed_test>
 Con el sensor HC-SR04 ya calibrado, se utilizó el código presentado en el @fig:arduino_code para medir la distancia a la que se encontraba el auto de juguete a través del tiempo. En el @fig:arduino_code:12 se muestra como se utiliza una medida relativa de tiempo donde se define $t=0$ en el momento en el que se ejecuta la función ```cpp void setup()``` en el Arduino.
@@ -255,7 +255,7 @@ Después de convertir los archivos `.log` obtenidos del procedimiento presentado
 ) <fig:noisy_speed_test_graph>
 
 Se aplicó un filtro Hampel para eliminar el ruido de medición del conjunto de datos. El filtro utiliza un enfoque de _ventana deslizante_ para identificar valores atípicos comparando cada punto con la mediana local en su vecindad. Los parámetros se establecieron con un tamaño de ventana de 13 puntos y un umbral de 0, lo que significa que cualquier punto que se desviara de su mediana local se consideró ruido y se reemplazó con el valor de la mediana. Se eligieron estos parámetros agresivos porque se espera que la señal física subyacente (distancia vs. tiempo) sea uniforme y monótona---como una función exponencial---, lo que hace que cualquier desviación pronunciada probablemente se deba a artefactos de medición en lugar de variaciones legítimas de la señal.
-Los resultados de este filtro se presentan en la @fig:hampel_filter. El _script_ en Python del algoritmo se presenta en el _Google Colab Notebook_ adjunto.
+Los resultados de este filtro se presentan en la @fig:hampel_filter. El _script_ en Python del algoritmo se presenta en el _Notebook_ adjunto.
 #subpar.grid(
   placement: bottom,
   scope: "parent",
