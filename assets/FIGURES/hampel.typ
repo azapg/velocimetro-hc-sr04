@@ -7,7 +7,8 @@
   plot.plot(
     size: (10, 7),
     y-max: 110,
-    x-tick-step: 1,
+    x-tick-step: 0.5,
+    x-minor-tick-step: 0.25,
     x-grid: true,
     y-grid: true,
     y-label: [Distancia $lambda$ (#unit[cm])],
@@ -39,7 +40,7 @@
         )),
         style: (stroke: none),
         mark: "o",
-        mark-style: (fill: red.lighten(10%), stroke: none),
+        mark-style: (fill: red.lighten(10%), stroke: red.darken(30%)),
         mark-size: 0.12,
         label: [Valores atípicos],
       )

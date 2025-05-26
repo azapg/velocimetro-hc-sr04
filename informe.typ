@@ -106,7 +106,7 @@ La confección del dispositivo de medición consiste en unir el sensor HC-SR04 a
 #let trigPin = num[4]
 #let echoPin = num[5]
 
-El sensor ultrasónico HC-SR04 tiene cuatro pines: `Vcc`, `Gnd`, `Trig` y `Echo` _(Véase la @fig:HC-SR04)_. El pin `Vcc` se conecta a la fuente de alimentación de #qty[5][V]. El pin `Gnd` se conecta a tierra. El pin `Trig`, utilizado para emitir ondas ultrasónicas, se conecta al pin digital #trigPin del Arduino. El pin `Echo`, utilizado para recibir estas ondas ultrasónicas, se conecta al pin digital #echoPin del Arduino. El Arduino se alimenta a través de un cable USB conectado a la computadora.
+El sensor ultrasónico HC-SR04 tiene cuatro pines: `Vcc`, `Gnd`, `Trig` y `Echo` _(Véase la @fig:HC-SR04)_ @Fuentes_2014. El pin `Vcc` se conecta a la fuente de alimentación de #qty[5][V]. El pin `Gnd` se conecta a tierra. El pin `Trig`, utilizado para emitir ondas ultrasónicas, se conecta al pin digital #trigPin del Arduino. El pin `Echo`, utilizado para recibir estas ondas ultrasónicas, se conecta al pin digital #echoPin del Arduino. El Arduino se alimenta a través de un cable USB conectado a la computadora.
 
 Para programar el Arduino se decidió utilizar Platformio#footnote[https://platformio.org/] ya que este ecosistema permite mayor control que sistemas como Arduino IDE y además permite utilizar sus librerías y arquitecturas. El código en `C++` dentro del Arduino se presenta en el @fig:arduino_code. Este código incluye la configuración de los pines a utilizar, el uso del transductor emisor y receptor para obtener una lectura y la conversión a distancia utilizando la @eq:calibrated_regression obtenida en la @sec:calibration.
 
@@ -285,6 +285,12 @@ En la @fig:analytical_results se presentan los resultados analíticos obtenidos 
 ) <fig:analytical_results>
 
 = Discusión
+
+Inicialmente, se esperaba del análisis que la aceleración del auto fuera positiva en la dirección contraria al sensor, pero la @fig:analytical_results muestra una aceleración negativa, lo cual no es muy intuitivo. Se esperaría que al mover la palanca del control remoto del auto hacia adelante, este empezaría a acelerar positivamente ganando rapidez hasta llegar a un valor constante. Hay varias hipótesis que podrían explicar  este resultado, algunas se mencionan a continuación.
+
+*Limitaciones del Motor y Potencia.* El auto a control remoto utilizado es de bajo costo y posee un motor simple. Es probable que este motor genere un impulso inicial considerable (un pico de torque al arrancar), lo que explicaría el aumento inicial de la velocidad. Sin embargo, su potencia sostenida podría ser insuficiente para contrarrestar las fuerzas resistivas que aumentan con la velocidad, como la fricción del aire y la resistencia al rodamiento. Como resultado, el motor podría ser capaz de hacer que el auto alcance rápidamente su velocidad máxima para su potencia limitada bajo esas condiciones, y luego, la aceleración neta se vuelve negativa a medida que las fuerzas de resistencia superan la fuerza de propulsión del motor.
+
+*Respuesta No Lineal del Sistema.* No se puede asumir que el auto, al ser un sistema físico real, responderá de forma perfectamente lineal y continua a la entrada del joystick. Un motor simple, especialmente con una batería económica, puede tener una entrega de potencia que decae o se estabiliza rápidamente, no permitiendo una aceleración positiva sostenida en el tiempo, a pesar de que el usuario mantenga el joystick hacia adelante.
 
 = Conclusión
 
